@@ -1,0 +1,148 @@
+:root {
+    --main-bg-color: #009d63;
+    --main-text-color: white;
+    --second-text-color: #bbbec5;
+    --second-bg-color: #c1efde;
+  }
+  
+  .primary-text {
+    color: var(--main-text-color);
+  }
+  
+  .second-text {
+    color: var(--second-text-color);
+  }
+  
+  .primary-bg {
+    background-color: var(--main-bg-color);
+  }
+  
+  .secondary-bg {
+    background-color: var(--second-bg-color);
+  }
+  
+  .rounded-full {
+    border-radius: 100%;
+  }
+  
+ #wrapper {
+    overflow-x: hidden;
+    font-family: emoji;
+    background-size: cover;
+         background: linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.7)), url('images/cakess.jpg');
+    
+  }  
+  
+  #sidebar-wrapper {
+    min-height: 100vh;
+    margin-left: -15rem;
+    -webkit-transition: margin 0.25s ease-out;
+    -moz-transition: margin 0.25s ease-out;
+    -o-transition: margin 0.25s ease-out;
+    transition: margin 0.25s ease-out;
+  }
+  
+  #sidebar-wrapper .sidebar-heading {
+    padding: 0.875rem 1.25rem;
+    font-size: 1.2rem;
+  }
+  
+  #sidebar-wrapper .list-group {
+    width: 15rem;
+  }
+  
+  #page-content-wrapper {
+    min-width: 100vw;
+  }
+  
+  #wrapper.toggled #sidebar-wrapper {
+    margin-left: 0;
+  }
+  
+  #menu-toggle {
+    cursor: pointer;
+  }
+  
+  .list-group-item {
+    border: none;
+    padding: 20px 30px;
+  }
+  
+  .list-group-item.active {
+    background-color: transparent;
+    color: var(--main-text-color);
+    font-weight: bold;
+    border: none;
+  }
+  
+  @media (min-width: 768px) {
+    #sidebar-wrapper {
+      margin-left: 0;
+    }
+  
+    #page-content-wrapper {
+      min-width: 0;
+      width: 100%;
+    }
+  
+    #wrapper.toggled #sidebar-wrapper {
+      margin-left: -15rem;
+    }
+  }
+/* btn pay */
+.float-end{
+  padding-left: 20px;
+  padding-right: 20px;
+
+}
+/* For Printing */
+@media print{
+  
+  .btn{
+    display: none;
+  }
+  .form-control, .input-group-text{
+    border: 0px;
+  }
+  .noPrint{
+    display: none;
+  }
+
+}
+/* CSS for desktop screens */
+
+/* Your desktop styles go here */
+
+/* CSS for mobile screens */
+@media (max-width: 767px) {
+  /* Styles for screens with width up to 767 pixels (e.g., smartphones) */
+
+  /* Example styles: */
+  /* Adjust font sizes for mobile */
+  body {
+    font-size: 14px;
+  }
+
+  /* Hide certain elements on mobile */
+  .desktop-only {
+    display: none;
+  }
+
+  /* Adjust spacing for mobile */
+  .container {
+    padding: 10px;
+  }
+
+  /* Example of adjusting layout for mobile */
+  .column {
+    width: 100%;
+  }
+  .form-control {
+    width: 100%; /* Set the width of the search input to 100% on mobile */
+    margin-bottom: 10px; /* Add some spacing between the input and icon */
+  }
+  .input-group-text {
+    width: 100%; /* Set the width of the search icon to 100% on mobile */
+    text-align: center; /* Center the icon text on mobile */
+  }
+}
