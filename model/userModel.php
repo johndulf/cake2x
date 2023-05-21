@@ -12,7 +12,13 @@ if(function_exists($method)){ //fnSave
 else{
     echo "Function not exists";
 }
-
+function fnCheckStatus(){
+    if(isset($_SESSION['username']) && isset($_SESSION['password'])){
+        echo 1;
+    }else{
+        echo 2;
+    }
+}
 function fnSave(){
     global $con;
     $username = $_POST['username'];
