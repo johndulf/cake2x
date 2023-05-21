@@ -35,11 +35,12 @@ if(!isset($_SESSION['userid'])){
         </div>
 
         <nav class="navbar">
-            <a href="indexx.php">HOME</a>
-            <a href="indexx.php">ABOUT</a>
+            <a href="index.php">HOME</a>
+            <a href="index.php">ABOUT</a>
             <a href="menu.php">MENU</a>
             <a href="reserve.php">RESERVE</a>
-            <a href="indexx.php">CONTACT</a>
+            <a href="index.php#contact">CONTACT</a>
+            <div class="dropdown">
             <div class="dropdown">
   <a class="dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false">
   Account

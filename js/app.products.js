@@ -9,6 +9,9 @@ createApp({
             description:'',
             quantity:'',
             image:"",
+            price:undefined,
+            isLoggedIn:false,
+            showReserve:false,
         }
     },
     methods:{
@@ -80,10 +83,23 @@ createApp({
                     })
                 }
             })
+        },
+        checkStatus:function(){
+            const vm = this;
+            const data = new FormData();
+            data.append("method","fnCheckStatus");
+            axios.post('model/userModel.php',data).then(function(r){
+                if(r.data == 1){
+                    vm.isLoggedIn = true;
+                }else{
+                    vm.isLoggedIn = false;
+                }
+            })
         }
     },
       
     created:function(){
         this.fnGetProdcuts(0);
+        this.checkStatus();
     }
 }).mount('#products-app')

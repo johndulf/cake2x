@@ -78,7 +78,7 @@ createApp({
             .then(function(r){
                 if(r.data.ret == 1){
                     if(r.data.user_role == 1){
-                        window.location.href = 'indexx.php';
+                        window.location.href = 'index.php';
                     }else if(r.data.user_role == 2){
                         window.location.href = 'dashboard.php';
                     }

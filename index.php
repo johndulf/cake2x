@@ -28,9 +28,8 @@
 </head>
 
 <body>
-
-    <!-- header section start here  -->
-    <header class="header">
+  <div id="products-app" >
+  <header class="header">
         <div class="logoContent">
             <a href="#" class="logo"><img src="img/logo.png" alt=""></a>
             <h1 class="logoName">CakeEace </h1>
@@ -42,14 +41,26 @@
             <a href="menu.php">MENU</a>
             <a href="reserve.php">RESERVE</a>
             <a href="#contact">CONTACT</a>
-            <a href="login.php">LOGIN</a>
+            <div v-if="isLoggedIn">
+              <div class="dropdown">
+                <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  Account
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                  <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                </ul>
+              </div>
+            </div>
+            <div v-else>
+              <a href="login.php">LOGIN</a>
+            </div>
         </nav>
 
         <div class="icon">
             <i class="fas fa-search" id="search"></i>
             <i class="fas fa-bars" id="menu-bar"></i>
         </div>
-
         <div class="search">
             <input type="search" placeholder="search...">
         </div>
@@ -60,10 +71,11 @@
     <section class="home" id="home">
         <div class="homeContent">
             <h2>Delicious Cake for Everyone </h2>
-            <p>Lami Siya Nga Dili Bidle</p>
+            <p>Unang Kagat Diabetes Agad</p>
             <div class="home-btn">
-                <a href="#"><button>Reserve</button></a>
+                <a href="reserve.php"><button>Reserve</button></a>
             </div>
+        </div>
     </section>
 
     <!-- home section end here  -->
@@ -94,8 +106,8 @@
 
 
 
-    <div  id="products-app" >
-     <h1 class="products" style="color:black;">Menu</h1>
+    <div >
+      <h1 class="products" style="color:black; text-align:center; font-family:emoji;">Menu</h1>
       <div class="all-products">
          <div class="product" v-for="product in products">
             <img class="img-fluid" :src="'uploads/' + product.image"/>
@@ -103,14 +115,52 @@
                <h4 class="product-title">{{ product.productname }}
                </h4>
                <p class="product-price"> P{{ product.price }}</p>
-                            <button class="btn btn-primary float-center m-1" style="margin-right:10px;" @click="">Reserve</button>
-
-
+                <button class="btn btn-primary float-center m-1" style="margin-right:10px;" @click=""data-bs-toggle="modal" data-bs-target="#reserve" >Reserve</button>
             </div>
          </div>
        </div>
 
 
+        <div v-if="isLoggedIn" class="modal fade" tabindex="-1" id="reserve">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content p-4s">
+                    <div class="modal-header">
+                        <h5>Reserve</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <form @submit="fnSave($event)">
+                            <input class="form-control mb-2" required type="text" name="productname" placeholder="Product Name" v-model="productname" />
+                            <input class="form-control mb-2" required type="number" name="quantity" placeholder="Quantity" v-model="quantity" />
+                            <input class="form-control mb-2" required type="text" name="price" placeholder="500" v-model="price"  disabled />
+                            <select name="size" id="size" class="form-control mb-2">
+                                <option value="size" hidden selected>Size</option>
+                                <option value="Small">Small</option>
+                                <option value="medium">Medium</option>
+                                <option value="large">Large</option>
+                            </select>
+                            <button  type="submit" class="btn btn-outline-success float-end mt-3"  >Reserve</button>
+                            <button type="button" class="btn btn-outline-info float-end mt-3 me-2" data-bs-dismiss="modal">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-else class="modal fade" tabindex="-1" id="reserve">
+            <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content p-4s">
+                        <div class="modal-header">
+                            <h5>Please <a href="login.php">Log In</a> to continue</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      </div>
+      </div> 
+
+  
 
 
   
@@ -159,15 +209,7 @@
             created by <span>Team Jej </span> |all rights reserved 2023! 
         </div>
     </footer>
-
-
-
-
-
-
-
-
-
+  </div>
 
     <!-- custom js file  -->
     <script src="css/css.js"></script>
@@ -177,7 +219,6 @@
 <script src="js/axios.js"></script>
 <?php echo $app; ?>
  <script src="js/script.js"></script>
-
 
 </body>
 
