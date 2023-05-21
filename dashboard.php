@@ -30,7 +30,7 @@
     }
 </style>
 <body>
-<?php if($role == 1): ?>
+<?php if($role == 2): ?>
  <div class="d-flex" id="wrapper">
         <!--sidebar starts here-->
 

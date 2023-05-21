@@ -87,11 +87,15 @@ function fnLogin(){
             $_SESSION['email'] = $row['email'];
             $_SESSION['password'] = $row['password'];
             $_SESSION['role'] = $row['user_role'];
+            $ret = ['ret'=>$row['ret'],'user_role'=> (int)$row['user_role']];
+        }else{
+            $ret = ['ret'=>$row['ret']];
         }
-        $ret = $row['ret'];
+
     }
 
-    echo $ret;
+    echo json_encode($ret);
+    // echo json_encode($result->fetch_array());
 
 }
 

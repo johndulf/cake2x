@@ -51,7 +51,6 @@
             <span></span>
             <span></span>
             <span></span>
-
             Sign Up
         </a>
          </button>
@@ -77,20 +76,20 @@ createApp({
             data.append('method','fnLogin');
             axios.post('model/userModel.php',data)
             .then(function(r){
-                if(r.data == 1){
-
-                    window.location.href = 'indexx.php';
+                if(r.data.ret == 1){
+                    if(r.data.user_role == 1){
+                        window.location.href = 'indexx.php';
+                    }else if(r.data.user_role == 2){
+                        window.location.href = 'dashboard.php';
+                    }
                 }
-                else if(r.data == 2){
-                    window.location.href = 'dashboard.php';
-                }
-                else if(r.data == 3){
+                else if(r.data.ret == 3){
                     alert('Invalid Username or Password');
                 }
-                else if(r.data == 4){
+                else if(r.data.ret == 4){
                     alert('Account is locked');
                 }
-                
+                // console.log(r.data);
             })
         },
         
