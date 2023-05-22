@@ -8,8 +8,11 @@ createApp({
             productname:'',
             description:'',
             quantity:'',
+            num:1,
             image:"",
+            sizes:'small',
             price:undefined,
+            smallPrice:undefined,
             isLoggedIn:false,
             showReserve:false,
         }
@@ -57,19 +60,16 @@ createApp({
             .then(function(r){
                 if(productid == 0){
                     vm.products = [];
-                    
                     r.data.forEach(function(v){
                         
-                            vm.products.push({
-                                productname: v.productname,
-                                description: v.description,
-                                quantity : v.quantity,
-                                price:v.price,
-                                productid:v.productid,
-                                image: v.image
-                            })
-                                            
-                        
+                        vm.products.push({
+                            productname: v.productname,
+                            description: v.description,
+                            quantity : v.quantity,
+                            price:v.price,
+                            id:v.productid,
+                            image: v.image
+                        })
                     });
                     //console.log(vm.products);
                 }
@@ -78,7 +78,8 @@ createApp({
                         vm.productname = v.productname;
                         vm.description = v.description;
                         vm.quantity = v.quantity;
-                        vm.price = v.price;
+                        vm.price = Number(v.price);
+                        vm.smallPrice = vm.price;
                         vm.productid = v.productid;
                     })
                 }
@@ -95,11 +96,38 @@ createApp({
                     vm.isLoggedIn = false;
                 }
             })
-        }
+        },
+        fnReserve:function(e){
+            const vm = this;
+            const data = new FormData(e.currentTarget);
+            data.append("method","fnReserve");
+            data.append('reserved_id',0)
+            data.append('status',0)
+            axios.post('model/userModel.php',data).then(function(r){
+                console.log(r.data);
+                if(r.data == 1){
+                    alert("Product successfully reserved");
+                    window.location.href = 'index.php';
+                }else{
+                    alert('There was an error.');
+                }
+            })
+        },
     },
       
     created:function(){
         this.fnGetProdcuts(0);
         this.checkStatus();
+    },
+    watch:{
+        sizes(newValue,oldValue){
+            if(newValue =='small'){
+                this.price = this.smallPrice;
+            }else if(newValue == 'medium'){
+                this.price = this.smallPrice + (this.smallPrice * 0.25);
+            }else{
+                this.price = this.smallPrice + (this.smallPrice * 0.5);          
+            }
+        }
     }
 }).mount('#products-app')

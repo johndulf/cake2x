@@ -12,6 +12,28 @@ if(function_exists($method)){ //fnSave
 else{
     echo "Function not exists";
 }
+function fnReserve(){
+    global $con;
+    $product_id= $_POST['product_id'];
+    $user_id= $_SESSION['userid'];
+    $size= $_POST['sizes'];
+    $price= $_POST['price'];
+    $quantity= $_POST['quantity'];
+    $total = $_POST['total'];
+    $status= $_POST['status'];
+    $reserved_id= $_POST['reserved_id'];
+
+    $query= $con->prepare('call sp_saveUpdateReserved(?,?,?,?,?,?,?,?)');
+    $query->bind_param('iisiiiii',$product_id,$user_id,$size,$price,$quantity,$total,$status,$reserved_id);
+
+    if($query->execute()){
+        echo 1;
+    }
+    else{
+        echo json_encode(mysqli_error($con));
+    }
+
+}
 function fnCheckStatus(){
     if(isset($_SESSION['username']) && isset($_SESSION['password'])){
         echo 1;
