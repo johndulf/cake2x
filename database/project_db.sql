@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 10, 2023 at 12:20 PM
+-- Generation Time: May 22, 2023 at 06:50 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -25,24 +25,24 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getProducts` (IN `p_productid` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getCustomize` (IN `p_reserveid` INT)   BEGIN
 
-if p_productid = 0 then
-   select * from tbl_products;
+if p_reserveid = 0 then
+   select * from tbl_customize;
 else
-   select * from tbl_products where productid = p_productid;
+   select * from tbl_customize where reserveid = p_reserveid;
 
 end if;
 
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getReserved` (IN `p_productid` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getProducts` (IN `p_productid` INT)   BEGIN
 
 if p_productid = 0 then
-   select * from tbl_reserved;
+   select * from tbl_products;
 else
-   select * from tbl_reserved where productid = p_productid;
+   select * from tbl_products where productid = p_productid;
 
 end if;
 
@@ -117,13 +117,49 @@ end if;
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_save` (IN `p_userid` INT, IN `p_fullname` TEXT, IN `p_username` TEXT, IN `p_password` TEXT, IN `p_address` TEXT, IN `p_mobile` INT, IN `p_email` TEXT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_save` (IN `p_userid` INT, IN `p_fullname` TEXT, IN `p_username` TEXT, IN `p_password` TEXT, IN `p_address` TEXT, IN `p_mobile` VARCHAR(11), IN `p_email` TEXT)   BEGIN
 
 if p_userid = 0 THEN
 insert into tbl_users(fullname,username,password,address,mobile,email,user_role,date_created,status) values(p_fullname,p_username,p_password,p_address,p_mobile,p_email,2,now(),1);
 ELSE
-update tbl_users set fullname = p_fullname,username = p_username,password = p_password,address = p_address,mobile = p_mobile,email = p_email where userid = p_userid;
+update tbl_users set fullname = p_fullname,username = p_username,address = p_address,mobile = p_mobile,email = p_email where userid = p_userid;
 end if;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_saveCustomize` (IN `p_reserveid` INT, IN `p_userid` INT, IN `p_fullname` TEXT, IN `p_suggestion` TEXT, IN `p_message` TEXT, IN `p_flavor` TEXT, IN `p_size` TEXT, IN `p_address` INT, IN `p_mobile` VARCHAR(11), IN `p_image` TEXT, IN `p_quantity` INT, IN `p_date_created` DATE)   BEGIN
+	if p_reserveid = 0 THEN
+    INSERT INTO tbl_customize(userid,fullname,suggestion,message,flavor,size,address,mobile,quantity,image,date_created,status)
+  VALUES(p_userid,p_fullname,p_suggestion,p_message,p_flavor,p_size,p_image,p_quantity,p_date_created,0);
+     else 
+     	if p_image != "" THEN
+     		update tbl_customize SET 
+        		userid = p_userid,
+            	fullname = p_fullname,
+            	suggestion = p_suggestion,
+            	message = p_message,
+            	flavor = p_flavor,
+            	size = p_size,
+                address = p_address,
+                mobile = p_mobile,
+            	image = p_image,
+            	quantity = p_quantity,
+                date_created = p_date_created,
+            	status = 1 WHERE p_reserveid = p_reserveid;
+         else 
+         update tbl_customize SET 
+        		userid = p_userid,
+            	fullname = p_fullname,
+            	suggestion = p_suggestion,
+            	message = p_message,
+            	flavor = p_flavor,
+            	size = p_size,
+                address = p_address,
+                mobile = p_mobile,
+            	quantity = p_quantity,
+                date_created = p_date_created,
+            	status = 1 WHERE p_reserveid = p_reserveid;
+         end if;
+      end if;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_saveSeller` (IN `p_sellerid` INT, IN `p_fullname` TEXT, IN `p_username` TEXT, IN `p_password` TEXT, IN `p_address` TEXT, IN `p_mobile` INT, IN `p_email` TEXT)   BEGIN
@@ -154,26 +190,85 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_saveUpdateProduct` (IN `p_produc
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_saveUpdateReserved` (IN `p_productname` TEXT, IN `p_description` TEXT, IN `p_flavor` TEXT, IN `p_price` INT, IN `p_image` TEXT, IN `p_date` DATE, IN `p_productid` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_saveUpdateReserved` (IN `p_product_id` INT, IN `p_user_id` INT, IN `p_size` TEXT, IN `p_price` INT, IN `p_quantity` INT, IN `p_total` INT, IN `p_status` INT, IN `p_reserved_id` INT)   BEGIN
 
-	if p_productid = 0 THEN
-    	insert into tbl_reserved(productname,description,flavor,price,image,date_inserted)
-        values(p_productname,p_description,p_flavor,p_price,p_image,now());
+	if p_reserved_id = 0 THEN
+    	insert into tbl_reserved(product_id,user_id,size,price,quantity,total,status,date_inserted)
+        				VALUES(p_product_id,p_user_id,p_size,p_price,p_quantity,p_total,p_status,now());
     else
     	update tbl_reserved set 
-        productname = p_productname,
-        description = p_description,
-        flavor = p_flavor,
+        user_id = p_user_id,
+        size = p_size,
         price = p_price,
-        image = p_image
-        where productid = p_productid;
+        quantity = p_quantity,
+        total = p_total,
+        status = p_status
+        where reserved_id = p_reserved_id;
        
     end if;
         
 
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_updateCustomize` (IN `p_reserveid` INT, IN `p_userid` INT, IN `p_fullname` TEXT, IN `p_suggestion` TEXT, IN `p_message` TEXT, IN `p_flavor` TEXT, IN `p_size` TEXT, IN `p_address` TEXT, IN `p_mobile` VARCHAR(11), IN `p_image` TEXT, IN `p_quantity` INT, IN `p_date_created` DATE)   BEGIN
+	if p_reserveid = 0 THEN
+    INSERT INTO tbl_customize(userid,fullname,suggestion,message,flavor,size,address,mobile,quantity,image,date_created,status)
+  VALUES(p_userid,p_fullname,p_suggestion,p_message,p_flavor,p_size,p_image,p_quantity,p_date_created,0);
+     else 
+     	if p_image != "" THEN
+     		update tbl_customize SET 
+        		userid = p_userid,
+            	fullname = p_fullname,
+            	suggestion = p_suggestion,
+            	message = p_message,
+            	flavor = p_flavor,
+            	size = p_size,
+                address = p_address,
+                mobile = p_mobile,
+            	image = p_image,
+            	quantity = p_quantity,
+                date_created = p_date_created,
+            	status = 1 WHERE p_reserveid = p_reserveid;
+         else 
+         update tbl_customize SET 
+        		userid = p_userid,
+            	fullname = p_fullname,
+            	suggestion = p_suggestion,
+            	message = p_message,
+            	flavor = p_flavor,
+            	size = p_size,
+                address = p_address,
+                mobile = p_mobile,
+            	quantity = p_quantity,
+                date_created = p_date_created,
+            	status = 1 WHERE p_reserveid = p_reserveid;
+         end if;
+      end if;
+END$$
+
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_customize`
+--
+
+CREATE TABLE `tbl_customize` (
+  `reserveid` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `fullname` text NOT NULL,
+  `suggestion` text NOT NULL,
+  `message` text NOT NULL,
+  `flavor` text NOT NULL,
+  `size` text NOT NULL,
+  `address` text NOT NULL,
+  `mobile` text NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `image` text NOT NULL,
+  `status` int(11) NOT NULL,
+  `date_created` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -196,7 +291,10 @@ CREATE TABLE `tbl_products` (
 --
 
 INSERT INTO `tbl_products` (`productid`, `productname`, `description`, `quantity`, `price`, `image`, `date_inserted`) VALUES
-(26, 'strawberry cake', 'asad', 123, '400', 'sample.jpg', '2023-05-10');
+(31, 'caramels', 'asdasd', 32, '300', 'blog-img2.png', '2023-05-18'),
+(32, 'strawberry cake', 'asd', 2, '220', 'menu9.jpg', '2023-05-19'),
+(35, 'strawberry cake', '4', 5, '500', 'b1.jpg', '2023-05-20'),
+(36, 'caramels', 'ad', 21, '20', 'b1.jpg', '2023-05-20');
 
 -- --------------------------------------------------------
 
@@ -205,14 +303,26 @@ INSERT INTO `tbl_products` (`productid`, `productname`, `description`, `quantity
 --
 
 CREATE TABLE `tbl_reserved` (
-  `productid` int(11) NOT NULL,
-  `productname` text NOT NULL,
-  `description` text NOT NULL,
-  `flavor` text NOT NULL,
+  `reserved_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `size` text NOT NULL,
   `price` int(11) NOT NULL,
-  `image` text NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `total` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
   `date_inserted` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_reserved`
+--
+
+INSERT INTO `tbl_reserved` (`reserved_id`, `product_id`, `user_id`, `size`, `price`, `quantity`, `total`, `status`, `date_inserted`) VALUES
+(1, 31, 158, 'small', 300, 1, 300, 0, '2023-05-22'),
+(2, 32, 158, 'small', 220, 1, 220, 0, '2023-05-22'),
+(3, 35, 158, 'small', 500, 1, 500, 0, '2023-05-22'),
+(4, 36, 158, 'small', 20, 1, 20, 0, '2023-05-22');
 
 -- --------------------------------------------------------
 
@@ -253,7 +363,7 @@ CREATE TABLE `tbl_users` (
   `username` text NOT NULL,
   `password` text NOT NULL,
   `address` text NOT NULL,
-  `mobile` int(11) NOT NULL,
+  `mobile` varchar(11) NOT NULL,
   `email` text NOT NULL,
   `user_role` text NOT NULL,
   `date_created` datetime NOT NULL,
@@ -266,17 +376,21 @@ CREATE TABLE `tbl_users` (
 --
 
 INSERT INTO `tbl_users` (`userid`, `fullname`, `username`, `password`, `address`, `mobile`, `email`, `user_role`, `date_created`, `status`, `counterlock`) VALUES
-(129, 'asd sadas', 'we', '19b96d4db8d031bafadcd7ab403513f7', 'lapu lapu', 21312, 'asdasd@gmail.com', '2', '2023-05-09 07:39:51', 1, 2),
-(130, 'asd sadas', 'qa', '36ffec09404cc77a186f9731a58d3210', 'f', 21312, 'asdasd@gmail.com', '2', '2023-05-09 07:47:52', 1, 2),
-(135, 'qwe', 'qwe', '76d80224611fc919a5d54f0ff9fba446', 'qwe', 21312, 'wa@gmail.com', '1', '2023-05-09 08:15:53', 1, 0),
-(138, 'wet', 'tobol', 'a65a1a114bdbf2612b9f0ecf16db7932', 'f', 21312, 'asdasd@gmail.com', '2', '2023-05-09 08:20:27', 1, 1),
-(142, 'piste', 'ytyt', 'c24756cbd6aa7525d865880186c8a501', 'f', 21312, 'asdasd@gmail.com', '2', '2023-05-09 19:23:16', 1, 0),
-(143, 'awts', 'awts', '7b664c0a58675c42e33b371b87f7ff0a', 'f', 21312, 'asdasd@gmail.com', '2', '2023-05-10 12:22:37', 1, 0),
-(144, 'tr', 'tr', 'e7d707a26e7f7b6ff52c489c60e429b1', 'tn', 21312, 'wa@gmail.com', '2', '2023-05-10 12:23:33', 1, 0);
+(151, 'awwa', 'lk', 'd0fa06cd93335c8cae357ffe5cd1c4e9', 'qwe', '0922236451', 'wa@gmail.com', '2', '2023-05-18 17:35:25', 1, 0),
+(154, 'asd sadas', 'qa', '8264ee52f589f4c0191aa94f87aa1aeb', 'f', '090909', 'asdasd@gmail.com', '2', '2023-05-18 17:41:54', 1, 0),
+(155, 'asd sadas', 'qwq', 'a078b88157431887516448c823118d83', 'f', '21312', 'asdasd@gmail.com', '2', '2023-05-18 18:46:51', 1, 0),
+(157, 'asd sadas', 'fd', '36eba1e1e343279857ea7f69a597324e', 'f', '21312', 'asdasd@gmail.com', '1', '2023-05-19 16:29:07', 1, 1),
+(158, 'testtest', 'test', '202cb962ac59075b964b07152d234b70', 'asdasad', '123123123', 'test@123', '1', '2023-05-20 19:06:44', 1, 0);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `tbl_customize`
+--
+ALTER TABLE `tbl_customize`
+  ADD PRIMARY KEY (`reserveid`);
 
 --
 -- Indexes for table `tbl_products`
@@ -288,7 +402,7 @@ ALTER TABLE `tbl_products`
 -- Indexes for table `tbl_reserved`
 --
 ALTER TABLE `tbl_reserved`
-  ADD PRIMARY KEY (`productid`);
+  ADD PRIMARY KEY (`reserved_id`);
 
 --
 -- Indexes for table `tbl_sellers`
@@ -307,22 +421,28 @@ ALTER TABLE `tbl_users`
 --
 
 --
+-- AUTO_INCREMENT for table `tbl_customize`
+--
+ALTER TABLE `tbl_customize`
+  MODIFY `reserveid` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `tbl_products`
 --
 ALTER TABLE `tbl_products`
-  MODIFY `productid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `productid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `tbl_reserved`
 --
 ALTER TABLE `tbl_reserved`
-  MODIFY `productid` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `reserved_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `tbl_users`
 --
 ALTER TABLE `tbl_users`
-  MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=146;
+  MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=159;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
