@@ -34,7 +34,7 @@ if(!isset($_SESSION['userid'])){
     }
 </style>
 <body>
-<?php if($role == 1): ?>
+<?php if($role == 2): ?>
         <div id="register-app">
   <div class="d-flex" id="wrapper">
         <!--sidebar starts here-->
