@@ -115,7 +115,7 @@
                <h4 class="product-title">{{ product.productname }}
                </h4>
                <p class="product-price"> P{{ product.price }}</p>
-                <button class="btn btn-primary float-center m-1" style="margin-right:10px;" @click=""data-bs-toggle="modal" data-bs-target="#reserve" >Reserve</button>
+                <button class="btn btn-primary float-center m-1" style="margin-right:10px;" @click="fnGetProdcuts(product.id)"data-bs-toggle="modal" data-bs-target="#reserve" >Reserve</button>
             </div>
          </div>
        </div>
@@ -129,16 +129,25 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-4">
-                        <form @submit="fnSave($event)">
-                            <input class="form-control mb-2" required type="text" name="productname" placeholder="Product Name" v-model="productname" />
-                            <input class="form-control mb-2" required type="number" name="quantity" placeholder="Quantity" v-model="quantity" />
-                            <input class="form-control mb-2" required type="text" name="price" placeholder="500" v-model="price"  disabled />
-                            <select name="size" id="size" class="form-control mb-2">
-                                <option value="size" hidden selected>Size</option>
-                                <option value="Small">Small</option>
+                        <form @submit.prevent="fnReserve($event)">
+                            <p>{{productname}}</p>
+                            <p>{{description}}</p>
+                            <label for="sizes">Sizes</label>
+                            <select  name="sizes" id="size" class="form-control mb-2" v-model="sizes" >
+                                <!-- <option value="size" hidden selected>Size</option> -->
+                                <option value="small" >Small</option>
                                 <option value="medium">Medium</option>
                                 <option value="large">Large</option>
                             </select>
+                            <label for="price">Price:</label>
+                            <input class="form-control mb-2" type="number" name="price" id="price" :value="price" readonly>
+                            <!-- <p>Price: &#8369;{{price}}</p> -->
+                            <label for="quantity">Quantity:</label>
+                            <input class="form-control mb-2" type="number" name="quantity" id="quantity" v-model="num">
+                            <label for="total">Total:</label>
+                            <input class="form-control mb-2" type="number" name="total" id="total" :value="price * num" readonly>
+                            <!-- <p  name="total" id="total">Total : &#8369;{{price * num}}</p> -->
+                            <input type="number" name="product_id" id="product_id" :value="productid" hidden>
                             <button  type="submit" class="btn btn-outline-success float-end mt-3"  >Reserve</button>
                             <button type="button" class="btn btn-outline-info float-end mt-3 me-2" data-bs-dismiss="modal">Cancel</button>
                         </form>
