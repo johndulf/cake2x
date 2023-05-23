@@ -41,6 +41,45 @@ function fnCheckStatus(){
         echo 2;
     }
 }
+// function fnGetReserved()
+// {
+//     global $con;
+//     $reserved_id = $_POST['reserved_id'];
+    
+//     if ($reserved_id == 0) {
+//         $query = $con->prepare("SELECT * FROM tbl_reserved");
+//     } else {
+//         $query = $con->prepare("SELECT * FROM tbl_reserved WHERE reserved_id = ?");
+//         $query->bind_param('i', $reserved_id);
+//     }
+    
+//     if ($query->execute()) {
+//         $result = $query->get_result();
+//         $data = array();
+//         while ($row = $result->fetch_array()) {
+//             $data[] = $row;
+//         }
+
+//         echo json_encode($data);
+//     } else {
+//         echo json_encode(mysqli_error($con));
+//     }
+// }
+
+// function fnDeleteReserved()
+// {
+//     global $con;
+//     $reserved_id = $_POST['reserved_id'];
+
+//     $query = $con->prepare('DELETE FROM tbl_reserved WHERE reserved_id = ?');
+//     $query->bind_param('i', $reserved_id);
+
+//     if ($query->execute()) {
+//         echo 1;
+//     } else {
+//         echo json_encode(mysqli_error($con));
+//     }
+// }
 function fnSave(){
     global $con;
     $username = $_POST['username'];

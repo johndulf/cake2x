@@ -114,8 +114,65 @@ createApp({
             })
         },
     },
+    // fnDeleteReserved(reserved_id) {
+    //     if (confirm("Are you sure you want to delete this reserved item?")) {
+    //       const data = new FormData();
+    //       const vm = this;
+    //       data.append("method", "fnDeleteReserved");
+    //       data.append("reserved_id", reserved_id);
+    //       axios.post('model/userModel.php', data)
+    //         .then(function(r) {
+    //           if (r.data == 1) {
+    //             alert("Reserved item successfully deleted");
+    //             vm.fnGetReserved(0); // Refresh the list of reserved items
+    //           } else {
+    //             alert('There was an error deleting the reserved item.');
+    //           }
+    //         })
+    //         .catch(function(error) {
+    //           console.log(error);
+    //         });
+    //     }
+    //   },
+      
+    // fnGetReserved(reserved_id) {
+    //     const vm = this;
+    //     const data = new FormData();
+    //     data.append("method", "fnGetReserved");
+    //     data.append("reserved_id", reserved_id);
+        
+    //     axios.post('model/userModel.php', data)
+    //       .then(function(r) {
+    //         if (reserved_id == 0) {
+    //           vm.products = [];
+    //           r.data.forEach(function(v) {
+    //             vm.products.push({
+    //               productname: v.productname,
+    //               description: v.description,
+    //               quantity: v.quantity,
+    //               price: v.price,
+    //               id: v.productid,
+    //               image: v.image
+    //             });
+    //           });
+    //         } else {
+    //           r.data.forEach(function(v) {
+    //             vm.productname = v.productname;
+    //             vm.description = v.description;
+    //             vm.quantity = v.quantity;
+    //             vm.price = Number(v.price);
+    //             vm.smallPrice = vm.price;
+    //             vm.productid = v.productid;
+    //           });
+    //         }
+    //       })
+    //       .catch(function(error) {
+    //         console.log(error);
+    //       });
+    //   },
       
     created:function(){
+        // this.fnGetReserved(0);
         this.fnGetProdcuts(0);
         this.checkStatus();
     },
