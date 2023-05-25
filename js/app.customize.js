@@ -8,11 +8,16 @@ createApp({
             fullname:'',
             suggestion:'',
             date_created:'',
+            message:'',
             // userid:[],
-            flavor:'',
-            size:'',
+            // flavor:'',
+            price:250,
+            sizes:'small',
             quantity:'',
             image:"",
+            mobile:'',
+            date:'',
+            reserveid:0,
         }
     },
     methods:{
@@ -25,10 +30,9 @@ createApp({
             data.append('method','fnSaveCustomize');
             axios.post('model/customizeModel.php',data)
             .then(function(r){
-                console.log(r);
+                console.log(r.data);
                 if(r.data == 1){
                     alert("customize successfully saved");
-                    // window.location.href = 'products.php';
                     vm.fnGetCustomize(0);
                 }
                 else{
@@ -49,7 +53,7 @@ createApp({
                 })
             }
         },
-        fnGetCustomize:function(reserveid){
+        fnGetCustomize:function(){
             const vm = this;
             const data = new FormData();
             data.append("method","fnGetCustomize");
@@ -92,8 +96,18 @@ createApp({
             })
         }
     },
-      
     created:function(){
         this.fnGetCustomize(0);
+    },
+    watch:{
+        sizes(newValue,oldValue){
+            if(newValue =='small'){
+                this.price = 250;
+            }else if(newValue == 'medium'){
+                this.price = 400;
+            }else if(newValue == 'large'){
+                this.price = 550;          
+            }
+        }
     }
 }).mount('#customize-app')

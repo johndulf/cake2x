@@ -50,7 +50,7 @@
                 <!-- <a href="" style="font-size:25px" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
                     <i class="fas fa-user-tie me-2"></i> Seller
                 </a> -->
-                <a href="reservation.php"  style="font-size:25px" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
+                <a href="customize.php"  style="font-size:25px" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
                     <i class="fas fa-receipt me-2"></i> Customize
                 </a> 
    

@@ -1,5 +1,5 @@
 <?php 
-
+session_start();
 include "../includes/config.php"; 
 
 $method = $_POST['method'];
@@ -13,27 +13,24 @@ else{
 
 function fnSaveCustomize(){
     global $con;
-    $fullname = $_POST['fullname'];
     $suggestion = $_POST['suggestion'];
     $message = $_POST['message'];
     $flavor = $_POST['flavor'];
     $size = $_POST['size'];
-    $address = $_POST['address'];
-    $mobile = $_POST['mobile'];
-    $quantity = $_POST['quantity'];
+    $quantity =(int) $_POST['quantity'];
     $date = $_POST['date'];
-    $userid = $_POST['userid'];
-    $reserveid = $_POST['reserveid'];
-
+    $userid =  $_SESSION['userid'];
+    $reserveid = (int)$_POST['reserveid'];
+    $price=(int)$_POST['price'];
+    $total = $quantity * $price;
     $filename = $_FILES['productimage']['name'];
-    $folder = '../uploads/';
-    $destination = $folder . $filename;
-    move_uploaded_file($_FILES['productimage']['tmp_name'],$destination);
-
     $query = $con->prepare('call sp_saveCustomize(?,?,?,?,?,?,?,?,?,?,?)');
-    $query->bind_param('ssssssiisii',$fullname,$suggestion,$message,$flavor,$size,$address,$mobile,$date,$filename,$userid,$reserveid);
+    $query->bind_param('iissssiiiss',$reserveid ,$userid,$suggestion,$message,$flavor,$size,$quantity,$price,$total,$filename,$date);
     
     if($query->execute()){
+        $folder = '../uploads/';
+        $destination = $folder . $filename;
+        move_uploaded_file($_FILES['productimage']['tmp_name'],$destination);
         echo 1;
     }
     else{
