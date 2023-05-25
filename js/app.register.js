@@ -46,6 +46,7 @@ createApp({
         //   })
         // },
 
+        // lccked user
         fnUnlockAccount:function(userid){
             const vm = this;   
             const data = new FormData();
@@ -57,40 +58,65 @@ createApp({
                 vm.fnGetUsers(0);
             })
         },
-        fnSave:function(e){
+        //save user
+        fnSave: function(e) {
             const vm = this;
-            e.preventDefault();    
+            e.preventDefault();
             var form = e.currentTarget;
             const data = new FormData(form);
-            data.append("userid",this.userid);
-            data.append('method','fnSave');
-            axios.post('model/userModel.php',data)
-            .then(function(r){
+            data.append("userid", this.userid);
+            data.append("method", "fnSave");
+            axios.post('model/userModel.php', data)
+              .then(function(r) {
                 console.log(r);
-                if(r.data == 1){
-                    alert("User successfully saved");
-                     window.location.href = 'userlist.php';
-                    //    document.querySelector("#update").reset();
-                    vm.fnGetUsers(0);
+                if (r.data == 1) {
+                  // Show success message using SweetAlert
+                  Swal.fire({
+                    title: "Success",
+                    text: "User successfully saved",
+                    icon: "success"
+                  }).then(function() {
+                    // Redirect to "userlist.php"
+                    window.location.href = 'userlist.php';
+                  });
+                  vm.fnGetUsers(0);
+                } else {
+                  // Show error message using SweetAlert
+                  Swal.fire({
+                    title: "Error",
+                    text: "There was an error.",
+                    icon: "error"
+                  });
                 }
-                else{
-                    alert('There was an error.');
-                }
-            })
-        },
-        DeleteUser:function(userid){
-            if(confirm("Are you sure you want to delete this user?")){
+              });
+          },
+
+          // Delete User:
+          DeleteUser: function(userid) {
+            Swal.fire({
+              title: "Confirmation",
+              text: "Are you sure you want to delete this user?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+              if (result.isConfirmed) {
                 window.location.href = 'userlist.php';
                 const data = new FormData();
                 const vm = this;
-                data.append("method","DeleteUser");
-                data.append("userid",userid);
-               axios.post('model/userModel.php',data)
-                .then(function(r){
+                data.append("method", "DeleteUser");
+                data.append("userid", userid);
+                axios.post('model/userModel.php', data)
+                  .then(function(r) {
                     vm.fnGetUsers();
-                })
-            }
-        },
+                  });
+              }
+            });
+          },
+          
+          // Get User
         fnGetUsers:function(userid){
             const vm = this;
             const data = new FormData();

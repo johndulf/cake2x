@@ -1,6 +1,7 @@
 <?php 
     
     $app = "<script src='js/app.products.js'></script>";
+    $app = "<script src='js/app.reserved.js'></script>";
     // $fullname = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : '';
     // $role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
 ?>

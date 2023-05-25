@@ -33,7 +33,7 @@ if(!isset($_SESSION['userid'])){
     }
 </style>
 <body>
-<?php if($role == 1): ?>
+<?php if($role == 2): ?>
         <div id="register-app">
   <div class="d-flex" id="wrapper">
         <!--sidebar starts here-->
@@ -107,10 +107,10 @@ if(!isset($_SESSION['userid'])){
                <thead align="center">
         <tr >
             <th>Image</th>
-            <th>Fullname</th>
+            <!-- <th>Fullname</th> -->
             <th>Suggestion</th>
             <th>Message</th>
-            <th>Address</th>
+            <!-- <th>Address</th> -->
             <th>Mobile Number </th>
             <th>Size</th>
             <th>Quantity</th>
@@ -124,7 +124,7 @@ if(!isset($_SESSION['userid'])){
     
     
 
-    <tr v-for="customize in users">
+  <!--   <tr v-for="customize in users">
         <td>{{ customize. }}</td>
         <td>{{ customize.username }}</td>
         <td>{{ customize.email }}</td>
@@ -138,7 +138,7 @@ if(!isset($_SESSION['userid'])){
 
             <a v-if="user.counterlock >= 3" href="#" @click="fnUnlockAccount(user.userid)">Unlock</a>
         </td>
-    </tr>
+    </tr> -->
 </tbody>
 </table>
 </div>

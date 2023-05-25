@@ -7,63 +7,36 @@ createApp({
             productid:0,
             productname:'',
             description:'',
-            flavor:'',
-            image:"",        }
+            quantity:'',
+            num:1,
+            image:"",
+            sizes:'small',
+            price:undefined,
+            smallPrice:undefined,
+            isLoggedIn:false,
+            showReserve:false,
+        }
     },
     methods:{
-        fnSave:function(e){
-            const vm = this;
-            e.preventDefault();    
-            var form = e.currentTarget;
-            const data = new FormData(form);
-            data.append("productid",this.productid);
-            data.append('method','fnSave');
-            axios.post('model/reservedModel.php',data)
-            .then(function(r){
-                console.log(r);
-                if(r.data == 1){
-                    alert("User successfully saved");
-                    vm.fnGetReserved(0);
-                }
-                else{
-                    alert('There was an error.');
-                }
-            })
-        },
-         DeleteReserved:function(productid){
-            if(confirm("Are you sure you want to delete this product?")){
-               const data = new FormData();
-                  const vm = this;
-                data.append("method","DeleteReserved");
-                data.append("productid",productid);
-                axios.post('model/reservedModel.php',data)
-                .then(function(r){
-                    vm.fnGetReserved();
-                })
-            }
-        },
-        fnGetReserved:function(productid){
+        fnGetProdcuts:function(productid){
             const vm = this;
             const data = new FormData();
-            data.append("method","fnGetReserved");
+            data.append("method","fnGetProducts");
             data.append("productid",productid);
-            axios.post('model/reservedModel.php',data)
+            axios.post('model/productModel.php',data)
             .then(function(r){
                 if(productid == 0){
                     vm.products = [];
-                    
-                  r.data.forEach(function(v){
+                    r.data.forEach(function(v){
                         
-                            vm.products.push({
-                                productname: v.productname,
-                                description: v.description,
-                                flavor : v.flavor,
-                                price:v.price,
-                                productid:v.productid,
-                                image: v.image
-                            })
-                                            
-                        
+                        vm.products.push({
+                            productname: v.productname,
+                            description: v.description,
+                            quantity : v.quantity,
+                            price:v.price,
+                            id:v.productid,
+                            image: v.image
+                        })
                     });
                     //console.log(vm.products);
                 }
@@ -71,17 +44,114 @@ createApp({
                     r.data.forEach(function(v){
                         vm.productname = v.productname;
                         vm.description = v.description;
-                        vm.flavor = v.flavor;
-                        vm.date = v.date;
-                        vm.price = v.price;
+                        vm.quantity = v.quantity;
+                        vm.price = Number(v.price);
+                        vm.smallPrice = vm.price;
                         vm.productid = v.productid;
                     })
                 }
             })
-        }
+        },
+        checkStatus:function(){
+            const vm = this;
+            const data = new FormData();
+            data.append("method","fnCheckStatus");
+            axios.post('model/userModel.php',data).then(function(r){
+                if(r.data == 1){
+                    vm.isLoggedIn = true;
+                }else{
+                    vm.isLoggedIn = false;
+                }
+            })
+        },
+        fnReserve:function(e){
+            const vm = this;
+            const data = new FormData(e.currentTarget);
+            data.append("method","fnReserve");
+            data.append('reserved_id',0)
+            data.append('status',0)
+            axios.post('model/userModel.php',data).then(function(r){
+                console.log(r.data);
+                if(r.data == 1){
+                    alert("Product successfully reserved");
+                    window.location.href = 'index.php';
+                }else{
+                    alert('There was an error.');
+                }
+            })
+        },
     },
+    // DeleteReserve(reserved_id) {
+    //     if (confirm("Are you sure you want to delete this reserved item?")) {
+    //       const data = new FormData();
+    //       const vm = this;
+    //       data.append("method", "DeleteReserve");
+    //       data.append("reserved_id", reserved_id);
+    //       axios.post('model/reservedModel.php', data)
+    //         .then(function(r) {
+    //           if (r.data == 1) {
+    //             alert("Reserved item successfully deleted");
+    //             vm.fnGetReserved(0); // Refresh the list of reserved items
+    //           } else {
+    //             alert('There was an error deleting the reserved item.');
+    //           }
+    //         })
+    //         .catch(function(error) {
+    //           console.log(error);
+    //         });
+    //     }
+    //   },
+      
+    // fnGetReserve(reserved_id) {
+    //     const vm = this;
+    //     const data = new FormData();
+    //     data.append("method", "fnGetReserve");
+    //     data.append("reserved_id", reserved_id);
+        
+    //     axios.post('model/reservedModel.php', data)
+    //       .then(function(r) {
+    //         if (reserved_id == 0) {
+    //           vm.products = [];
+    //           r.data.forEach(function(v) {
+    //             vm.products.push({
+    //               productname: v.productname,
+    //               description: v.description,
+    //               quantity: v.quantity,
+    //               price: v.price,
+    //               id: v.productid,
+    //               image: v.image
+    //             });
+    //           });
+    //         } else {
+    //           r.data.forEach(function(v) {
+    //             vm.productname = v.productname;
+    //             vm.description = v.description;
+    //             vm.quantity = v.quantity;
+    //             vm.price = Number(v.price);
+    //             vm.smallPrice = vm.price;
+    //             vm.productid = v.productid;
+    //           });
+    //         }
+    //       })
+    //       .catch(function(error) {
+    //         console.log(error);
+    //       });
+    //   },
       
     created:function(){
-        this.fnGetReserved(0);
+        // this.fnGetReserve(0);
+        this.fnGetProdcuts(0);
+        this.checkStatus();
+    },
+    watch:{
+        sizes(newValue,oldValue){
+            if(newValue =='small'){
+                this.price = this.smallPrice;
+            }else if(newValue == 'medium'){
+                this.price = this.smallPrice + (this.smallPrice * 0.25);
+            }else{
+                this.price = this.smallPrice + (this.smallPrice * 0.5);          
+            }
+        }
     }
 }).mount('#products-app')

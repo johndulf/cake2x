@@ -5,7 +5,7 @@ session_start();
 if(!isset($_SESSION['userid'])){
     header('location:login.php');
 }
-    // $app = "<script src='js/app.register.js'></script>";
+    $app = "<script src='js/app.customize.js'></script>";
     // $fullname = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : '';
     // $role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
 ?>
@@ -76,7 +76,7 @@ if(!isset($_SESSION['userid'])){
         </div>
     </header>
 
-  <div id="products-app" style="margin-top:150px;">
+  <div id="customize-app" style="margin-top:150px;">
         <div class="container">
             <div class="row">
                 <h1 style="color:white; font-family:emoji; text-shadow: 2px 1px #21201e; ">Customize Cake</h1>
@@ -85,20 +85,20 @@ if(!isset($_SESSION['userid'])){
                 
                 <div class="col-md-12 p-5">
                     
-                    <form @submit.prevent="fnSave($event)" style="font-size:25px;">
+                    <form @submit.prevent="fnSaveCustomize($event)" style="font-size:25px;">
                     <div class="form-group">
                     <input class="mb-4 p-3" required type="date" name="date" placeholder="date" style="font-size:15px; font-family:emoji;" v-model="date" />
-                    <input class="mb-4 p-3" required type="number" name="mobile" placeholder="Phone Number" style="font-size:15px; font-family:emoji;" v-model="mobile" />
+                    <input class="mb-4 p-3" required type="text" name="mobile" placeholder="Phone Number" style="font-size:15px; font-family:emoji;" v-model="mobile" />
                 </div>
                         <textarea class="form-control mb-4" name="Suggestion"  placeholder="Suggestion"  style="font-size:15px; font-family:emoji;"v-model="suggestion"></textarea>
                         <textarea class="form-control mb-4" name="message" placeholder="Message" style="font-size:15px; font-family:emoji;" v-model="message"></textarea>
-                        <select name="size" id="size" class="form-control mb-4" style="font-size:15px; font-family:emoji;" v-model="size">
+                        <select name="size" id="size" class="form-control mb-4" style="font-size:15px; font-family:emoji;" v-model="sizes">
                             <option selected disabled hidden>Size</option>
                           <option value="250" >Small : &#8369;250.00</option>
                           <option value="350" >medium : &#8369;350.00</option>
                           <option value="450">Large : &#8369;450.00</option>
                         </select>
-                        <select name="flavor" id="flavor" class="form-control mb-4" style="font-size:15px; font-family:emoji;" v-model="flavor">
+                        <select name="flavor" id="flavor" class="form-control mb-4" style="font-size:15px; font-family:emoji;" v-model="flavors">
                             <option selected disabled hidden>Flavor</option>
                           <option value="Cookies" >Cookies</option>
                           <option value="Chocolate" >Chocolate </option>
@@ -119,7 +119,9 @@ if(!isset($_SESSION['userid'])){
               <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
               <script src="css/css.js"></script>
               <script src="js/axios.js"></script>
+              <?php echo $app; ?>
               <script src="js/vue.3.js"></script>
-              <script src="js/app.message.js"></script>
+            
+
 </body>
 </html>

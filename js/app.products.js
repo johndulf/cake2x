@@ -18,39 +18,73 @@ createApp({
         }
     },
     methods:{
-        fnSave:function(e){
+              fnSave: function(e) {
             const vm = this;
-            e.preventDefault();    
+            e.preventDefault();
             var form = e.currentTarget;
             const data = new FormData(form);
-            data.append("productid",this.productid);
-            data.append('method','fnSave');
-            axios.post('model/productModel.php',data)
-            .then(function(r){
+            data.append("productid", this.productid);
+            data.append("method", "fnSave");
+            axios.post("model/productModel.php", data)
+              .then(function(r) {
                 console.log(r);
-                if(r.data == 1){
-                    alert("Product successfully saved");
-                    window.location.href = 'products.php';
+                if (r.data == 1) {
+                  Swal.fire({
+                    title: "Product successfully saved",
+                    icon: "success"
+                  }).then(function() {
+                    window.location.href = "products.php";
                     vm.fnGetProdcuts(0);
+                  });
+                } else {
+                  Swal.fire({
+                    title: "Error",
+                    text: "There was an error.",
+                    icon: "error"
+                  });
                 }
-                else{
-                    alert('There was an error.');
-                }
-            })
-        },
-         DeleteProducts:function(productid){
-            if(confirm("Are you sure you want to delete this product?")){
-                window.location.href = 'products.php';
-               const data = new FormData();
-                  const vm = this;
-                data.append("method","DeleteProducts");
-                data.append("productid",productid);
-                axios.post('model/productModel.php',data)
-                .then(function(r){
-                    vm.fnGetProdcuts();
-                })
-            }
-        },
+              });
+          },
+          DeleteProducts: function(productid) {
+            const vm = this;
+            Swal.fire({
+              title: "Confirmation",
+              text: "Are you sure you want to delete this product?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#d33",
+              cancelButtonColor: "#3085d6",
+              confirmButtonText: "Yes, delete it!",
+              cancelButtonText: "Cancel"
+            }).then(function(result) {
+              if (result.isConfirmed) {
+                const data = new FormData();
+                data.append("method", "DeleteProducts");
+                data.append("productid", productid);
+                axios.post('model/productModel.php', data)
+                  .then(function(r) {
+                    // Show success message using SweetAlert
+                    Swal.fire({
+                      title: "Success",
+                      text: "Product successfully deleted",
+                      icon: "success"
+                    }).then(function() {
+                      // Redirect to "products.php"
+                      window.location.href = "products.php";
+                    });
+                  })
+                  .catch(function(error) {
+                    console.error(error);
+                    // Show error message using SweetAlert
+                    Swal.fire({
+                      title: "Error",
+                      text: "Failed to delete product",
+                      icon: "error"
+                    });
+                  });
+              }
+            });
+          },
         fnGetProdcuts:function(productid){
             const vm = this;
             const data = new FormData();
@@ -59,28 +93,33 @@ createApp({
             axios.post('model/productModel.php',data)
             .then(function(r){
                 if(productid == 0){
+                    
                     vm.products = [];
                     r.data.forEach(function(v){
                         
-                        vm.products.push({
-                            productname: v.productname,
-                            description: v.description,
-                            quantity : v.quantity,
-                            price:v.price,
-                            id:v.productid,
-                            image: v.image
-                        })
+                            vm.products.push({
+                                productname: v.productname,
+                                description: v.description,
+                                quantity : v.quantity,
+                                price:v.price,
+                                productid:v.productid,
+                                image: v.image
+                            })
+                                            
+                        
                     });
                     //console.log(vm.products);
                 }
                 else{
+                    
                     r.data.forEach(function(v){
+                      
                         vm.productname = v.productname;
                         vm.description = v.description;
                         vm.quantity = v.quantity;
-                        vm.price = Number(v.price);
-                        vm.smallPrice = vm.price;
+                        vm.price = v.price;
                         vm.productid = v.productid;
+                   
                     })
                 }
             })
@@ -114,62 +153,6 @@ createApp({
             })
         },
     },
-    // fnDeleteReserved(reserved_id) {
-    //     if (confirm("Are you sure you want to delete this reserved item?")) {
-    //       const data = new FormData();
-    //       const vm = this;
-    //       data.append("method", "fnDeleteReserved");
-    //       data.append("reserved_id", reserved_id);
-    //       axios.post('model/userModel.php', data)
-    //         .then(function(r) {
-    //           if (r.data == 1) {
-    //             alert("Reserved item successfully deleted");
-    //             vm.fnGetReserved(0); // Refresh the list of reserved items
-    //           } else {
-    //             alert('There was an error deleting the reserved item.');
-    //           }
-    //         })
-    //         .catch(function(error) {
-    //           console.log(error);
-    //         });
-    //     }
-    //   },
-      
-    // fnGetReserved(reserved_id) {
-    //     const vm = this;
-    //     const data = new FormData();
-    //     data.append("method", "fnGetReserved");
-    //     data.append("reserved_id", reserved_id);
-        
-    //     axios.post('model/userModel.php', data)
-    //       .then(function(r) {
-    //         if (reserved_id == 0) {
-    //           vm.products = [];
-    //           r.data.forEach(function(v) {
-    //             vm.products.push({
-    //               productname: v.productname,
-    //               description: v.description,
-    //               quantity: v.quantity,
-    //               price: v.price,
-    //               id: v.productid,
-    //               image: v.image
-    //             });
-    //           });
-    //         } else {
-    //           r.data.forEach(function(v) {
-    //             vm.productname = v.productname;
-    //             vm.description = v.description;
-    //             vm.quantity = v.quantity;
-    //             vm.price = Number(v.price);
-    //             vm.smallPrice = vm.price;
-    //             vm.productid = v.productid;
-    //           });
-    //         }
-    //       })
-    //       .catch(function(error) {
-    //         console.log(error);
-    //       });
-    //   },
       
     created:function(){
         // this.fnGetReserved(0);

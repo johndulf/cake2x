@@ -5,6 +5,7 @@ session_start();
 if(!isset($_SESSION['userid'])){
     header('location:login.php');
 }
+$app = "<script src='js/app.products.js'></script>";
     // $fullname = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : '';
     $role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
 ?>
@@ -34,7 +35,7 @@ if(!isset($_SESSION['userid'])){
 </style>
 <body>
 <?php if($role == 2): ?>
-        <div id="register-app">
+        <div id="products-app">
   <div class="d-flex" id="wrapper">
         <!--sidebar starts here-->
 
@@ -106,16 +107,16 @@ if(!isset($_SESSION['userid'])){
             <table class="table bg-white rounded shadow-sm  table-hover display-product-table ">
                <thead align="center">
         <tr >
-            <th>Fullname</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>Mobile Number </th>
-            <th>Size</th>
+            <th>Product Name</th>
+            <th>Description Name</th>
+            <th>Image</th>
             <th>Quantity</th>
+            <th>Size</th>
+            <th>Status</th>
         </tr>
     </thead>
 
-    <tbody>
+    <tbody>          
     </tbody>
 </table>
 </div>
@@ -125,7 +126,7 @@ if(!isset($_SESSION['userid'])){
     <script src="js/vue.3.js"></script>
 <script src="js/axios.js"></script>
  <script src="js/script.js"></script>
-
+ <?php echo $app; ?>
 </body>
 </html>
 

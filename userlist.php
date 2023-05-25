@@ -17,6 +17,7 @@ if(!isset($_SESSION['userid'])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel = "icon" href = "img/logo.png" type = "image/x-icon">
     <title>User list</title>
@@ -55,7 +56,7 @@ if(!isset($_SESSION['userid'])){
                 <!-- <a href="" style="font-size:25px" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
                     <i class="fas fa-user-tie me-2"></i> Seller
                 </a> -->
-                <a href="#"  style="font-size:25px" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
+                <a href="customize.php"  style="font-size:25px" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
                     <i class="fas fa-receipt me-2"></i> Customize
                 </a>
                     <a href="reservation.php"  style="font-size:25px" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
@@ -174,12 +175,14 @@ if(!isset($_SESSION['userid'])){
       </div>
       </div>
       </div>  
-      <?php endif ?>
+    
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
     <script src="js/vue.3.js"></script>
 <script src="js/axios.js"></script>
  <script src="js/script.js"></script>
 <?php echo $app; ?>
+<?php endif ?>
 </body>
 </html>
 

@@ -5,12 +5,13 @@ createApp({
         return{
             users:[],
             reserveid:0,
-            fullname:'',
+            // fullname:'',
+            date:'',
+            mobile:'',
             suggestion:'',
-            date_created:'',
-            // userid:[],
-            flavor:'',
-            size:'',
+            message:'',
+            flavors:'',
+            sizes:'',
             quantity:'',
             image:"",
         }
@@ -62,7 +63,6 @@ createApp({
                     r.data.forEach(function(v){
                         
                             vm.users.push({
-                                fullname: v.productname,
                                 suggestion: v.description,
                                 quantity : v.quantity,
                                 message:v.message,

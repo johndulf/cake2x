@@ -7,7 +7,8 @@ if(!isset($_SESSION['userid'])){
 }
     
     // include "includes/header.php";
-    $app = "<script src='js/app.products.js'></script>";
+  $app = "<script src='js/app.products.js'></script>";
+$app = "<script src='js/app.reserved.js'></script>";
     $fullname = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : '';
     $role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
 ?>
@@ -60,7 +61,7 @@ if(!isset($_SESSION['userid'])){
                 <!-- <a href="" style="font-size:25px" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
                     <i class="fas fa-user-tie me-2"></i> Seller
                 </a> -->
-                <a href="#"  style="font-size:25px" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
+                <a href="customize.php"  style="font-size:25px" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
                     <i class="fas fa-receipt me-2"></i> Customize
                 </a>
                 <a href="reservation.php"  style="font-size:25px" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
