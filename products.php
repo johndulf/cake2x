@@ -8,7 +8,6 @@ if(!isset($_SESSION['userid'])){
     
     // include "includes/header.php";
   $app = "<script src='js/app.products.js'></script>";
-$app = "<script src='js/app.reserved.js'></script>";
     $fullname = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : '';
     $role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
 ?>
@@ -20,6 +19,7 @@ $app = "<script src='js/app.reserved.js'></script>";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/index.css">
         <link rel = "icon" href = "img/logo.png" type = "image/x-icon">
@@ -218,7 +218,7 @@ $app = "<script src='js/app.reserved.js'></script>";
       </div>  
       </div>  
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
-    
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
 
    <?php endif ?>
 <script src="js/vue.3.js"></script>
