@@ -12,7 +12,48 @@ if(function_exists($method)){ //fnSave
 else{
     echo "Function not exists";
 }
+function updateStatusReserve(){
+    global $con;
+    $status = $_POST['status'];
+    $reservedid = $_POST['id'];
+    $query = $con->prepare('call sp_updateStatusReserve(?,?)');
+    $query->bind_param('ii',  $reservedid,$status);
+    if($query->execute()){
+        echo 1;
+    }
+    else{
+        echo json_encode(mysqli_error($con));
+    }
+}
+function getAllUser(){
+    global $con;
+    $id = $_POST['userid'];
+    $query = $con->prepare('call sp_getAllUser(?)');
+    $query->bind_param('i', $id);
+    $query->execute();
+    $result = $query->get_result();
+    $data = array();
+    while($row = $result->fetch_assoc()){
+        $data[] = $row;
+    }
+    echo json_encode($data);
+}
+function getReserveList(){
+    global $con;
+    $id = $_POST['id'];
+    $query = $con->prepare('call sp_getReserveList(?)');
+    $query->bind_param('i',$id);
+    $query->execute();
 
+    $result = $query->get_result();
+    $data = array();
+    while($row = $result->fetch_assoc()){
+        $data[] = $row;
+    }
+    echo json_encode($data);
+
+    
+}
 function fnSave(){
     global $con;
     $username = $_POST['username'];

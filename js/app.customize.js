@@ -60,39 +60,39 @@ createApp({
             data.append("reserveid",reserveid);
             axios.post('model/customizeModel.php',data)
             .then(function(r){
-                if(reserveid == 0){
-                    vm.users = [];
+                // if(reserveid == 0){
+                //     vm.users = [];
                     
-                    r.data.forEach(function(v){
+                //     r.data.forEach(function(v){
                         
-                            vm.users.push({
-                                fullname: v.productname,
-                                suggestion: v.description,
-                                quantity : v.quantity,
-                                message:v.message,
-                                size:v.size,
-                                flavor:v,flavor,
-                                reserveid:v.reserveid,
-                                // image: v.image
-                            })
+                //             // vm.users.push({
+                //             //     fullname: v.productname,
+                //             //     suggestion: v.description,
+                //             //     quantity : v.quantity,
+                //             //     message:v.message,
+                //             //     size:v.size,
+                //             //     flavor:v,flavor,
+                //             //     reserveid:v.reserveid,
+                //             //     // image: v.image
+                //             // })
                                             
                         
-                    });
-                    //console.log(vm.products);
-                }
-                else{
-                    r.data.forEach(function(v){
-                        vm.fullname = v.fullname;
-                        vm.suggestion = v.suggestion;
-                        vm.quantity = v.quantity;
-                        vm.message = v.price;
-                        vm.size = v.price;
-                        vm.flavor = v.price;
-                        vm.price = v.price;
-                        vm.price = v.price;
-                        vm.reserveid = v.reserveid;
-                    })
-                }
+                //     });
+                //     //console.log(vm.products);
+                // }
+                // else{
+                //     r.data.forEach(function(v){
+                //         vm.fullname = v.fullname;
+                //         vm.suggestion = v.suggestion;
+                //         vm.quantity = v.quantity;
+                //         vm.message = v.price;
+                //         vm.size = v.price;
+                //         vm.flavor = v.price;
+                //         vm.price = v.price;
+                //         vm.price = v.price;
+                //         vm.reserveid = v.reserveid;
+                //     })
+                // }
             })
         }
     },

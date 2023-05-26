@@ -76,6 +76,7 @@ createApp({
             data.append('method','fnLogin');
             axios.post('model/userModel.php',data)
             .then(function(r){
+                console.log(r.data)
                 if(r.data.ret == 1){
                     if(r.data.user_role == 1){
                         window.location.href = 'index.php';

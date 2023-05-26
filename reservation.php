@@ -1,12 +1,11 @@
 <?php 
 
 session_start();
-
-if(!isset($_SESSION['userid'])){
-    header('location:login.php');
-}
     $fullname = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : '';
     $role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
+    if($role != 2){
+        header('location:login.php');
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -32,16 +31,13 @@ if(!isset($_SESSION['userid'])){
         }
     </style>
     <body>
-    <?php if($role == 2): ?>
-        <div id="customize-app">
+        <div id="reservation-app">
             <div class="d-flex" id="wrapper">
                 <!--sidebar starts here-->
                 <div class="bg-black" id="sidebar-wrapper">
-            
                     <div class="sidebar-heading text-center py-4 text-light fs-4 fw-bold text-uppercase border-bottom">
                         <img src="images/admin.png" width="100" height="100" alt="logo" > ADMIN
                     </div>
-
                     <div class="list-group list-group-flush my-3">
                         <a href="dashboard.php"  style="font-size:25px" class="list-group-item list-group-item-action bg-transparent second-text active">
                             <i class="fas fa-tachometer-alt me-2"></i> Dashboard 
@@ -65,57 +61,109 @@ if(!isset($_SESSION['userid'])){
                             <i class="fa-solid fa-right-from-bracket me-2"></i> Log Out
                         </a>
                     </div>
-
                 </div>
                 <!--sidebar ends here-->
-
-                <div id="page-content-wrapper">
-                <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
-                    <div class="d-flex align-item-center">
-                        <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
-                        <h2 class="fs-2 m-0">Reserve</h2>
-                    </div>    
-                    
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>   
-                    
-                </nav>
-                <div class="container-fluid row my-5" id="user">
-                    <div class="input-group rounded row">
-                        <h3 class="fs-4 mb-3 col">List of Reserve</h3>
-                        <div class="col-12 col-lg-3">  
-                            <div class="col mt-2 mb-3">
-                                <input type="search" v-model="search" @input="searchUser(search)" class="form-control" placeholder="Search Reservation">
+            <div>
+            <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
+                <div class="d-flex align-item-center">
+                    <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
+                    <h2 class="fs-2 m-0">Reserve</h2>
+                </div>    
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>   
+            </nav>
+            <div class="container-fluid row my-5" id="user">
+                <div class="input-group rounded row">
+                    <h3 class="fs-4 mb-3 col">List of Reserve</h3>
+                    <div class="col-12 col-lg-3">  
+                        <div class="col mt-2 mb-3">
+                            <input type="search"  @input="searchUser(search)" class="form-control" placeholder="Search Reservation">
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <table class="table bg-white rounded shadow-sm  table-hover display-product-table ">
+                        <thead align="center">
+                            <tr>
+                                <th>Fullname</th>
+                                <th>Product Name</th>
+                                <th>Date Reserve</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="list in lists">
+                                <th>{{list.fullname}}</th>
+                                <th>{{list.product_name}}</th>
+                                <th>{{list.date_reserve}}</th>
+                                <th>
+                                    <button @click="viewUser(list.userid)" data-bs-toggle="modal" data-bs-target="#viewUser">View User</button>
+                                    <button @click="showReserve(list.reserve_id)"data-bs-toggle="modal" data-bs-target="#showDetail">Show Details</button>
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+                <div class="modal fade" tabindex="-1" id="viewUser">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content p-4s">
+                            <div class="modal-header">
+                                <h5>User Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body p-4">  
+                                <form>
+                                    <div v-for="user in userDetail">
+                                        <p>Fullname : {{user.fullname}}</p>
+                                        <p>Addess: {{user.address}}</p>
+                                        <p>Email: {{user.email}}</p>
+                                        <p>Contact Number: {{user.mobile}}</p>
+                                        <p>Status:{{user.status == 1 ? 'Active': 'Deactivated'}} </p>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-info float-end mt-3 me-2" data-bs-dismiss="modal">Close</button>
+                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-            <div class="col">
-            <table class="table bg-white rounded shadow-sm  table-hover display-product-table ">
-            <thead align="center">
-            <tr>
-                <th>Fullname</th>
-                <th>Email</th>
-                <th>Address</th>
-                <th>Mobile Number </th>
-                <th>Size</th>
-                <th>Quantity</th>
-            </tr>
-            </thead>
-
-                <tbody>
-            </tbody>
-            </table>
-    </div>
-
-    <?php endif ?>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/vue.3.js"></script>
-    <script src="js/axios.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/app.customize.js"></script>
+                </div>
+                <div class="modal fade" tabindex="-1" id="showDetail">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content p-4s">
+                            <div class="modal-header">
+                                <h5>Reserve Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body p-4">  
+                                <form>
+                                    <div v-for="d in detail">
+                                        <p>Reseve Id: {{d.reserve_id}}</p>
+                                        <p>Reserve Date: {{d.date_reserve}}</p>
+                                        <p>Produt Name: {{d.product_name}}</p>
+                                        <p>Quantity : {{d.order_quantity}}</p>
+                                        <p>Price: {{d.price}}</p>
+                                        <p>Total : {{d.total}}</p>
+                                        <p>Status : {{d.status == 0 ? 'Pending' : 'Approved'}}</p>
+                                        <button v-if="d.status == 0" type="submit" class="btn btn-outline-success float-end mt-3" @click.prevent="updateStatus(d.reserve_id)">Approve Reserve</button>
+                                        <button v-else type="submit" class="btn btn-secondary float-end mt-3" disabled>Approved</button>
+                                        <button type="button" class="btn btn-outline-info float-end mt-3 me-2" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        <div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/vue.3.js"></script>
+        <script src="js/axios.js"></script>
+        <script src="js/script.js"></script>
+        <script src="js/app.reservation.js"></script>
 
     </body>
 </html>
