@@ -18,6 +18,39 @@ createApp({
         }
     },
     methods:{
+        fnSave:function(e){
+            const vm = this;
+            e.preventDefault();    
+            var form = e.currentTarget;
+            const data = new FormData(form);
+            data.append("productid",this.productid);
+            data.append('method','fnSave');
+            axios.post('model/productModel.php',data)
+            .then(function(r){
+                console.log(r);
+                if(r.data == 1){
+                    alert("Product successfully saved");
+                    window.location.href = 'products.php';
+                    vm.fnGetProdcuts(0);
+                }
+                else{
+                    alert('There was an error.');
+                }
+            })
+        },
+         DeleteProducts:function(productid){
+            if(confirm("Are you sure you want to delete this product?")){
+                window.location.href = 'products.php';
+               const data = new FormData();
+                  const vm = this;
+                data.append("method","DeleteProducts");
+                data.append("productid",productid);
+                axios.post('model/productModel.php',data)
+                .then(function(r){
+                    vm.fnGetProdcuts();
+                })
+            }
+        },
         fnGetProdcuts:function(productid){
             const vm = this;
             const data = new FormData();
@@ -81,17 +114,17 @@ createApp({
             })
         },
     },
-    // DeleteReserve(reserved_id) {
+    // fnDeleteReserve(reserved_id) {
     //     if (confirm("Are you sure you want to delete this reserved item?")) {
     //       const data = new FormData();
     //       const vm = this;
-    //       data.append("method", "DeleteReserve");
+    //       data.append("method", "fnDeleteReserve");
     //       data.append("reserved_id", reserved_id);
-    //       axios.post('model/reservedModel.php', data)
+    //       axios.post('model/userModel.php', data)
     //         .then(function(r) {
     //           if (r.data == 1) {
     //             alert("Reserved item successfully deleted");
-    //             vm.fnGetReserved(0); // Refresh the list of reserved items
+    //             vm.fnGetReserve(0); // Refresh the list of reserved items
     //           } else {
     //             alert('There was an error deleting the reserved item.');
     //           }
@@ -108,7 +141,7 @@ createApp({
     //     data.append("method", "fnGetReserve");
     //     data.append("reserved_id", reserved_id);
         
-    //     axios.post('model/reservedModel.php', data)
+    //     axios.post('model/userModel.php', data)
     //       .then(function(r) {
     //         if (reserved_id == 0) {
     //           vm.products = [];
@@ -139,7 +172,7 @@ createApp({
     //   },
       
     created:function(){
-        // this.fnGetReserve(0);
+        // this.fnGetReserved(0);
         this.fnGetProdcuts(0);
         this.checkStatus();
     },
