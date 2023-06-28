@@ -11,12 +11,37 @@ else{
     echo "Function not exists";
 }
 
-
-function fnGetReserve(){
+function fnSave(){
     global $con;
-    $reserveid = $_POST['reserveid'];
-    $query = $con->prepare("call sp_getReserve(?)");
-    $query->bind_param('i',$reserveid);
+    $productname = $_POST['productname'];
+    $description = $_POST['description'];
+    $flavor = $_POST['flavor'];
+    $date = $_POST['date'];
+    $price = $_POST['price'];
+    $productid = $_POST['productid'];
+
+    $filename = $_FILES['productimage']['name'];
+    $folder = '../uploads/';
+    $destination = $folder . $filename;
+    move_uploaded_file($_FILES['productimage']['tmp_name'],$destination);
+
+    $query = $con->prepare('call sp_saveUpdateReserved(?,?,?,?,?,?,?)');
+    $query->bind_param('ssssisi',$productname,$description,$flavor,$price,$date,$filename,$productid);
+    
+    if($query->execute()){
+        echo 1;
+    }
+    else{
+        echo json_encode(mysqli_error($con));
+    }
+
+}
+
+function fnGetProducts(){
+    global $con;
+    $productid = $_POST['productid'];
+    $query = $con->prepare("call sp_getReserved(?)");
+    $query->bind_param('i',$productid);
     $query->execute();
     $result = $query->get_result();
     $data = array();
@@ -27,12 +52,11 @@ function fnGetReserve(){
     echo json_encode($data);
 
 }
-
-    function DeleteReserve(){
+    function DeleteProducts(){
         global $con;
-        $reserveid = $_POST['reserveid'];
-        $query = $con->prepare("DELETE FROM tbl_reserved where reserveid = ?");
-        $query->bind_param('i',$reserveid);
+        $productid = $_POST['productid'];
+        $query = $con->prepare("DELETE FROM tbl_reserved where productid = ?");
+        $query->bind_param('i',$productid);
         $query->execute();
         $query->close();
         $con->close();

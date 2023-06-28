@@ -110,7 +110,7 @@ if(!isset($_SESSION['userid'])){
             <!-- <th>Fullname</th> -->
             <th>Suggestion</th>
             <th>Message</th>
-            <!-- <th>Address</th> -->
+            <th>Address</th>
             <th>Mobile Number </th>
             <th>Size</th>
             <th>Quantity</th>
@@ -124,7 +124,7 @@ if(!isset($_SESSION['userid'])){
     
     
 
-  <!--   <tr v-for="customize in users">
+    <tr v-for="customize in users">
         <td>{{ customize. }}</td>
         <td>{{ customize.username }}</td>
         <td>{{ customize.email }}</td>
@@ -138,11 +138,11 @@ if(!isset($_SESSION['userid'])){
 
             <a v-if="user.counterlock >= 3" href="#" @click="fnUnlockAccount(user.userid)">Unlock</a>
         </td>
-    </tr> -->
+    </tr>
 </tbody>
 </table>
 </div>
-
+            
 <?php endif ?>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/vue.3.js"></script>

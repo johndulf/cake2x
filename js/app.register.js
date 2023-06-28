@@ -46,7 +46,6 @@ createApp({
         //   })
         // },
 
-        // lccked user
         fnUnlockAccount:function(userid){
             const vm = this;   
             const data = new FormData();
@@ -58,65 +57,131 @@ createApp({
                 vm.fnGetUsers(0);
             })
         },
-        //save user
-        fnSave: function(e) {
-            const vm = this;
-            e.preventDefault();
-            var form = e.currentTarget;
-            const data = new FormData(form);
-            data.append("userid", this.userid);
-            data.append("method", "fnSave");
-            axios.post('model/userModel.php', data)
-              .then(function(r) {
-                console.log(r);
-                if (r.data == 1) {
-                  // Show success message using SweetAlert
-                  Swal.fire({
-                    title: "Success",
-                    text: "User successfully saved",
-                    icon: "success"
-                  }).then(function() {
-                    // Redirect to "userlist.php"
-                    window.location.href = 'userlist.php';
-                  });
-                  vm.fnGetUsers(0);
-                } else {
-                  // Show error message using SweetAlert
-                  Swal.fire({
-                    title: "Error",
-                    text: "There was an error.",
-                    icon: "error"
-                  });
-                }
-              });
-          },
+    fnSave: function(e) {
+  const vm = this;
+  e.preventDefault();
+  var form = e.currentTarget;
+  const data = new FormData(form);
+  data.append("userid", this.userid);
+  data.append("method", "fnSave");
+  axios.post("model/userModel.php", data)
+    .then(function(response) {
+      console.log(response);
+      if (response.data === 1) {
+        alert("User successfully saved");
+        window.location.href = "userlist.php";
+        // document.querySelector("#update").reset();
+        vm.fnGetUsers(0);
+      } else if (response.data === "exists_username") {
+        alert("This username has already been registered. Please choose another username.");
+      } else if (response.data === "exists_password") {
+        alert("This password has already been registered. Please choose another password.");
+      } else if (response.data === "exists_username_password") {
+        alert("Both the username and password have already been registered. Please choose different values for both.");
+      } else {
+        alert("There was an error.");
+      }
+    })
+    .catch(function(error) {
+      console.log(error);
+      alert("There was an error.");
+    });
+},
 
-          // Delete User:
-          DeleteUser: function(userid) {
-            Swal.fire({
-              title: "Confirmation",
-              text: "Are you sure you want to delete this user?",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#3085d6",
-              cancelButtonColor: "#d33",
-              confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
-              if (result.isConfirmed) {
+
+        
+        DeleteUser:function(userid){
+            if(confirm("Are you sure you want to delete this user?")){
                 window.location.href = 'userlist.php';
                 const data = new FormData();
                 const vm = this;
-                data.append("method", "DeleteUser");
-                data.append("userid", userid);
-                axios.post('model/userModel.php', data)
-                  .then(function(r) {
+                data.append("method","DeleteUser");
+                data.append("userid",userid);
+               axios.post('model/userModel.php',data)
+                .then(function(r){
                     vm.fnGetUsers();
-                  });
-              }
+                })
+            }
+        },
+        RestoreUser: function(userid) {
+    if (confirm("Are you sure you want to restore this user?")) {
+        const data = new FormData();
+        data.append("method", "RestoreUser");
+        data.append("userid", userid);
+
+        axios.post('model/userModel.php', data)
+            .then(function(response) {
+                // Handle the restoration process
+                console.log("User restored successfully!");
+            })
+            .catch(function(error) {
+                console.log(error);
             });
-          },
+    }
+},
+
+updateUser: function(e) {
+    e.preventDefault();
+    const vm = this;
+    var form = e.currentTarget;
+    const data = new FormData(form);
+
+    if (confirm("Are you sure you want to update this User")) {
+        data.append('method', 'updateUser');
+        axios.post('model/userModel.php', data)
+            .then(function(r) {
+                console.log(r);
+                if (r.data == 1) {
+                    alert("Your personal information has been updated.");
+                    window.location.href = "profile.php";
+                } else if (r.data == 2) {
+                    alert("There was an error updating your information!");
+                }
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+    }
+},
+
+        updatePassword: function(e) {
+          e.preventDefault(); // Prevents the default form submission behavior
+          const form = e.currentTarget; // Get the form element
+          const formData = new FormData(form); // Create a new FormData object with form data
           
-          // Get User
+          const userid = formData.get('userid'); // Get the value of the 'userid' field from the form data
+          const password = formData.get('password'); // Get the value of the 'password' field from the form data
+
+          const requestData = new FormData(); // Create a new FormData object for the request data
+          requestData.append('method', 'updatePassword'); // Append the method parameter to the request data
+          requestData.append('userid', userid); // Append the userid parameter to the request data
+          requestData.append('password', password); // Append the password parameter to the request data
+
+          return axios.post('model/userModel.php', requestData) // Send a POST request to the userModel.php file with the request data
+            .then(function(response) {
+              return response.data === true; // Return true if the response data is true, indicating a successful update
+            });
+        },
+
+        verifyPassword: function(e) {
+          e.preventDefault(); // Prevents the default form submission behavior
+          const form = e.currentTarget; // Get the form element
+          const formData = new FormData(form); // Create a new FormData object with form data
+          
+          const userid = formData.get('userid'); // Get the value of the 'userid' field from the form data
+          const password = formData.get('password'); // Get the value of the 'password' field from the form data
+
+          const requestData = new FormData(); // Create a new FormData object for the request data
+          requestData.append('method', 'verifyPassword'); // Append the method parameter to the request data
+          requestData.append('userid', userid); // Append the userid parameter to the request data
+          requestData.append('password', password); // Append the password parameter to the request data
+
+          return axios.post('model/userModel.php', requestData) // Send a POST request to the userModel.php file with the request data
+            .then(function(response) {
+              return response.data === true; // Return true if the response data is true, indicating a successful verification
+            });
+        },
+
         fnGetUsers:function(userid){
             const vm = this;
             const data = new FormData();

@@ -39,10 +39,9 @@ if(!isset($_SESSION['userid'])){
     }
 </style>
 <body>
-    
   <div  id="products-app" >
       <?php if($role == 2): ?>
- <div class="d-flex" id="wrapper">
+ <div class="d-flex" id="wrapper" >
         <!--sidebar starts here-->
 
         <div class="bg-black" id="sidebar-wrapper">
@@ -139,53 +138,46 @@ if(!isset($_SESSION['userid'])){
             </div>
                    
                 
-      <!-- <h2 class="products">Menu</h2>
-      <div class="all-products">
-         <div class="product" v-for="product in products">
-            <img class="img-fluid" :src="'uploads/' + product.image"/>
-            <div class="product-info">  {{ product.description }}
-               <h4 class="product-title">{{ product.productname }}
-               </h4>
-               <p class="product-price">{{ product.price }}</p>
-               
-                   <button class="btn btn-danger m1"  @click="DeleteProducts(product.productid)">Delete</button>
-                    <button class="btn btn-outline-success float-center m-1" @click="fnGetProdcuts(product.productid)"  data-bs-toggle="modal" data-bs-target="#updatePro">Update</button>
-                
-                  
+    
 
-            </div>
-         </div> -->
-
-
-         <div class="col">
-            <table class="table bg-white rounded shadow-sm  table-hover" >
-               <thead align="center">
-        <tr>
-            <th>Image</th>
-            <th>Product Name</th>
-            <th>Description</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Actions</th>
-        </tr>
+        <div class="col">
+  <table class="table bg-white rounded shadow-sm table-hover">
+    <thead align="center">
+      <tr>
+        <th>Image</th>
+        <th>Product Name</th>
+        <th>Description</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
     </thead>
-
     <tbody>
-        <tr  v-for="product in products">
-        <td> <img style="width:70px; height:45px;  display: block;margin-left: auto;margin-right: auto;"  :src="'uploads/' + product.image"/></td>
-            <td>{{ product.productname }}</td>
-            <td>{{ product.description }}</td>
-            <td>{{ product.quantity }}</td>
-            <td>{{ product.price }}</td>
-            <td>
-            <button class="btn btn-outline-success float-end mt-3" @click="fnGetProdcuts(product.productid)"  data-bs-toggle="modal" data-bs-target="#updatePro">Update</button>
-                <button class="btn btn-outline-danger float-end mt-3 me-2" @click="DeleteProducts(product.productid)"> Delete</button> 
+      <tr v-for="product in products" :key="product.productid">
+        <td>
+          <img style="width:70px; height:45px; display: block; margin-left: auto; margin-right: auto;" :src="'uploads/' + product.image" />
+        </td>
+        <td>{{ product.productname }}</td>
+        <td>{{ product.description }}</td>
+        <td>{{ product.quantity }}</td>
+        <td>{{ product.price }}</td>
+        <!-- <td>{{ product.quantity === 0 ? 'Sold' : 'Available' }}</td> -->
+     <td>
+  <span v-if="product.quantity === 0" style="font-weight: bold; color: red; font-size: 25px; font-family: emoji;">Sold</span>
+  <span v-else style="font-weight: bold; color: black;">Available</span>
+</td>
 
-            </td>
-        </tr>
+
+        <td>
+          <button class="btn btn-outline-success float-end mt-3" @click="fnGetProdcuts(product.productid)" data-bs-toggle="modal" data-bs-target="#updatePro">Update</button>
+          <button class="btn btn-outline-danger float-end mt-3 me-2" @click="DeleteProducts(product.productid)">Delete</button>
+        </td>
+      </tr>
     </tbody>
-</table>
+  </table>
 </div>
+
 
     <!--Update Product -->
        <div class="modal fade" tabindex="-1" id="updatePro">
@@ -216,6 +208,7 @@ if(!isset($_SESSION['userid'])){
             </div>
             
       </div>  
+  </div>
       </div>  
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>

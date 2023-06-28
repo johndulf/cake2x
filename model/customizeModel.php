@@ -1,5 +1,5 @@
 <?php 
-
+session_start();
 include "../includes/config.php"; 
 
 $method = $_POST['method'];
@@ -11,53 +11,26 @@ else{
     echo "Function not exists";
 }
 
-// function fnSaveCustomize(){
-//     global $con;
-//     $suggestion = $_POST['suggestion'];
-//     $message = $_POST['message'];
-//     $flavor = $_POST['flavors'];
-//     $size = $_POST['sizes'];
-//     $mobile = $_POST['mobile'];
-//     $quantity = $_POST['quantity'];
-//     $date = $_POST['date'];
-//     $status = $_POST['status'];
-//     $userid = $_POST['userid'];
-//     $reserveid = $_POST['reserveid'];
-
-//     $filename = $_FILES['productimage']['name'];
-//     $folder = '../uploads/';
-//     $destination = $folder . $filename;
-//     move_uploaded_file($_FILES['productimage']['tmp_name'],$destination);
-
-//     $query = $con->prepare('call sp_saveCustomize(?,?,?,?,?,?,?,?,?,?)');
-//     $query->bind_param('ssssiisiii',$suggestion,$message,$flavor,$size,$mobile,$date,$filename,$status,$userid,$reserveid);
-    
-//     if($query->execute()){
-//         echo 1;
-//     }
-//     else{
-//         echo json_encode(mysqli_error($con));
-//     }
-
-// }
-
 function fnSaveCustomize(){
     global $con;
-      $suggestion = $_POST['suggestion'];
+    $suggestion = $_POST['suggestion'];
     $message = $_POST['message'];
-    $user_id= $_SESSION['userid'];
-     $flavor = $_POST['flavors'];
-    $size= $_POST['sizes'];
-    $quantity= $_POST['quantity'];
-    $mobile = $_POST['mobile'];
-    $total = $_POST['total']
-    $status= $_POST['status'];
-    $reserved_id= $_POST['reserved_id'];
-
-    $query= $con->prepare('call sp_saveUpdateCustomize(?,?,?,?,?,?,?,?,?)');
-    $query->bind_param('ssisiiiii',$suggestion,$message,$userid,$size,$quantity,$mobile,$total,$status,$reserved_id);
-
+    $flavor = $_POST['flavor'];
+    $size = $_POST['size'];
+    $quantity =(int) $_POST['quantity'];
+    $date = $_POST['date'];
+    $userid =  $_SESSION['userid'];
+    $reserveid = (int)$_POST['reserveid'];
+    $price=(int)$_POST['price'];
+    $total = $quantity * $price;
+    $filename = $_FILES['productimage']['name'];
+    $query = $con->prepare('call sp_saveCustomize(?,?,?,?,?,?,?,?,?,?,?)');
+    $query->bind_param('iissssiiiss',$reserveid ,$userid,$suggestion,$message,$flavor,$size,$quantity,$price,$total,$filename,$date);
+    
     if($query->execute()){
+        $folder = '../uploads/';
+        $destination = $folder . $filename;
+        move_uploaded_file($_FILES['productimage']['tmp_name'],$destination);
         echo 1;
     }
     else{
@@ -80,6 +53,36 @@ function fnGetCustomize(){
 
     echo json_encode($data);
 
+}
+
+// function updateStatusCustomize(){
+//     global $con;
+//     $status = $_POST['status'];
+//     $reservedid = $_POST['id'];
+//     $query = $con->prepare('call sp_updateStatusReserve(?,?)');
+//     $query->bind_param('ii',  $reservedid,$status);
+//     if($query->execute()){
+//         echo 1;
+//     }
+//     else{
+//         echo json_encode(mysqli_error($con));
+//     }
+// }
+function getReserveList(){
+    global $con;
+    $id = $_POST['id'];
+    $query = $con->prepare('call sp_getReserveList(?)');
+    $query->bind_param('i',$id);
+    $query->execute();
+
+    $result = $query->get_result();
+    $data = array();
+    while($row = $result->fetch_assoc()){
+        $data[] = $row;
+    }
+    echo json_encode($data);
+
+    
 }
 
 

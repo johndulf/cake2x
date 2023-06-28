@@ -83,15 +83,15 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>    
             </nav>
-
+            <!-- <div id="register-app"> -->
              <div class="container-fluid px-4" >
                 
 
                 <div class="row g-3 my-2">
                     <div class="col-md-3">
                         <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
-                            <div>
-                                <h3 class="fs-2" id="student">User</h3>    
+                            <div id="register-app">   
+                                <span class="fs-2">{{ users.length }}</span>
                                             
 
                                 
@@ -112,7 +112,7 @@
                     
                     <div class="col-md-3">
                         <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
-                            <div>
+                            <div id="products-app">
                                 <h3 class="fs-2" id="fees">Product</h3>                                
                                 
                             </div>

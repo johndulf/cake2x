@@ -27,63 +27,69 @@ createApp({
                 }
             })
         },
-getCustomizeList: function(id) {
-  const vm = this;
-  const data = new FormData();
-  data.append('method', 'getCustomizeList');
-  data.append('id', id);
-  
-  axios.post('model/adminModel.php', data).then(r => {
-    r.data.forEach(list => {
-      vm.lists.push({
-        userid: list.userid,
-        fullname: list.fullname,
-        product_name: list.productname,
-        order_quantity: list.rq,
-        price: list.price,
-        total: list.total,
-        status: list.status,
-        date_reserve: list.date_inserted,
-        reserve_id: list.reserved_id,
-        customize: list.customize // Add the customize options to the list object
-      });
-    });
-  });
-},
-      deleteCustomize: function(reserveid) {
-  if (confirm("Are you sure you want to delete this customize item?")) {
+        getReserveList:function(id){
+            const vm = this;
+            const data = new FormData();
+            data.append('method','getReserveList')
+            data.append('id',id)
+            axios.post('model/adminModel.php',data).then(r =>{
+                // console.log(r.data)
+                r.data.forEach(list => {
+                    vm.lists.push({
+                        //user-details
+                        userid : list.userid,
+                        fullname: list.fullname,
+                        //
+                        //reserve-details
+                        product_name: list.productname,
+                        order_quantity: list.rq,
+                        size: list.size,
+                        price: list.price,
+                        total: list.total,
+                        status: list.status,
+                        date_reserve : list.date_inserted,
+                        reserve_id : list.reserved_id
+                        
+                    })
+                });
+            })
+            // console.log(this.lists)
+        },
+       deleteReservation:function(reserved_id) {
+        // console.log(reserved_id);
+  if (confirm("Are you sure you want to delete this reservation?")) {
     const vm = this;
     const data = new FormData();
-    data.append("method", "deleteCustomize");
-    data.append("reserveid", reserveid);
+    data.append("method", "deleteReservation");
+    data.append("reserved_id",reserved_id);
     axios.post("model/adminModel.php", data)
       .then(response => {
         // Check the response and perform actions accordingly
-        if (response.data === 'success') {
-          alert("Customize item deleted successfully");
-          // Refresh the customize item list or perform any other necessary actions
-          vm.getCustomizeList();
+        if (response.data = 'success') {
+          alert("Reservation deleted successfully");
+          window.location.href = 'reservation.php';   
+          // Refresh the reservation list or perform any other necessary actions
+        //   vm.getReserveList();
+          vm.getAllUsers();
         } else {
-          alert("Failed to delete customize item");
+          alert("Failed to delete reservation");
         }
       })
       .catch(error => {
         console.log(error);
-        alert("An error occurred while deleting the customize item");
+        alert("An error occurred while deleting the reservation");
       });
   }
 },
-
 
         viewUser:function(id){
             this.userDetail = this.users.filter(user => user.userid == id)
 
         },
-        showCustomize: function(reserveid) {
-  this.detail = this.lists.filter(list => list.reserveid === reserveid);
-  console.log(this.detail);
+        showReserve:function(id){
+            this.detail  = this.lists.filter(list => list.reserve_id == id)
+            console.log(this.detail)
         },
-
         getAllUsers:function(id){
             const vm = this
             const data = new FormData
@@ -106,7 +112,7 @@ getCustomizeList: function(id) {
 
     },
     created:function(){
-        this.getCustomizeList(0);
+        this.getReserveList(0);
         this.getAllUsers(0);
     }
 }).mount('#reservation-app');
